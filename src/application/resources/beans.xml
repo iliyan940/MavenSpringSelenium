@@ -7,5 +7,6 @@
 
 
 <bean id="driver" class="org.openqa.selenium.chrome.ChromeDriver" />
+<bean id="util" class="application.Util"/>
 
 </beans>
