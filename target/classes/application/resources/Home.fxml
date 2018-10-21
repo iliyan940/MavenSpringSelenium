@@ -14,13 +14,6 @@
          </BorderPane.margin></Button>
    </bottom>
    <center>
-      <TextArea fx:id="searchedPositions" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
-      </TextArea>
+      <VBox fx:id="fieldContainer" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
    </center>
-   <top>
-      <Label text="Search following:" BorderPane.alignment="CENTER" />
-   </top>
 </BorderPane>

@@ -18,7 +18,8 @@ import application.DAO.Positions;
 import application.models.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 public class HomeController implements Initializable{
 	
@@ -29,10 +30,10 @@ public class HomeController implements Initializable{
 	private ArrayList<Position> allPositions;
 	
 	@FXML
-    private TextArea searchedPositions;
+    private VBox fieldContainer;
 	
 	public HomeController() {
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\test7\\src\\application\\resources\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\SpringMavenSelenium\\src\\application\\resources\\chromedriver.exe");
 		this.cnx = new ClassPathXmlApplicationContext("application/resources/beans.xml");
 	}
 	
@@ -41,10 +42,12 @@ public class HomeController implements Initializable{
 		ArrayList<Position> positions = getPositions();
 		String data = positions.get(0).getName();
 		
-		for(int i = 1; i < positions.size(); i++) {
-				data = data + ", " + positions.get(i).getName(); 
+		for(int i = 0; i < positions.size(); i++) {
+			String position = positions.get(i).getName();
+			fieldContainer.getChildren().add(new TextField(position));
 		}
-		searchedPositions.setText(data);
+		
+		
 	}
 	
 	public void loadBrowser() {
