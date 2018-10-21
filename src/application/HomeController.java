@@ -33,26 +33,26 @@ public class HomeController implements Initializable{
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\test7\\src\\application\\resources\\chromedriver.exe");
-
+		this.cnx = new ClassPathXmlApplicationContext("application/resources/beans.xml");
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println("Loading Data");
+		ArrayList<Position> positions = getPositions();
+		String data = positions.get(0).getName();
 		
-		getPositions();
-		
-		
-		searchedPositions.setText("Test data");
+		for(int i = 1; i < positions.size(); i++) {
+				data = data + ", " + positions.get(i).getName(); 
+		}
+		searchedPositions.setText(data);
 	}
 	
 	public void loadBrowser() {
-		this.cnx = new ClassPathXmlApplicationContext("application/resources/beans.xml");
 		driver = (WebDriver) cnx.getBean("driver");
 		action = new Actions(driver);
 		this.util = (Util) cnx.getBean("util");
-				
-//		openSite();
+		
+		openSite();
 		((ClassPathXmlApplicationContext) cnx).close();
 	}
 	
@@ -89,17 +89,10 @@ public class HomeController implements Initializable{
 	}
 	
 	
-	public void getPositions() {
+	public ArrayList<Position> getPositions() {
 		Positions db = cnx.getBean("Positions",Positions.class);
-		
-		
-		Position pos = db.getPosition(1);
-		System.out.println("staan");
-		
-		
-//		allPositions =  db.getPositions();
-//		System.out.println(allPositions);
-//		return allPositions;
+		allPositions =  db.getPositions();
+		return allPositions;
 	}	
 	
 }

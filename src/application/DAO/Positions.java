@@ -29,7 +29,7 @@ public class Positions {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM positions");
 			
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
 				positions.add(new Position(rs.getInt("id"), rs.getString("name")));
 			}
 			rs.close();
