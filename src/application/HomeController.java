@@ -1,6 +1,9 @@
 package application;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -13,17 +16,34 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import application.DAO.Positions;
 import application.models.Position;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 
-public class HomeController {
+public class HomeController implements Initializable{
 	
 	private Actions action;
 	private ApplicationContext cnx;
 	private Util util;
 	private WebDriver driver;
+	private ArrayList<Position> allPositions;
+	
+	@FXML
+    private TextArea searchedPositions;
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\test7\\src\\application\\resources\\chromedriver.exe");
+
+	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		System.out.println("Loading Data");
+		
 		getPositions();
+		
+		
+		searchedPositions.setText("Test data");
 	}
 	
 	public void loadBrowser() {
@@ -31,8 +51,8 @@ public class HomeController {
 		driver = (WebDriver) cnx.getBean("driver");
 		action = new Actions(driver);
 		this.util = (Util) cnx.getBean("util");
-		
-		openSite();
+				
+//		openSite();
 		((ClassPathXmlApplicationContext) cnx).close();
 	}
 	
@@ -71,9 +91,15 @@ public class HomeController {
 	
 	public void getPositions() {
 		Positions db = cnx.getBean("Positions",Positions.class);
-		Position position = db.getPositions(1);
 		
-	}
-	
+		
+		Position pos = db.getPosition(1);
+		System.out.println("staan");
+		
+		
+//		allPositions =  db.getPositions();
+//		System.out.println(allPositions);
+//		return allPositions;
+	}	
 	
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
@@ -17,7 +18,37 @@ public class Positions {
 	@Autowired
 	private DataSource dataSource;
 	
-	public Position getPositions(int positionId) {
+	public ArrayList<Position> getPositions() {
+		ArrayList<Position> positions = new ArrayList<Position>();
+		Connection conn = null;
+		Position position = null;
+		
+		
+		try {
+			conn = dataSource.getConnection();
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM positions");
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				positions.add(new Position(rs.getInt("id"), rs.getString("name")));
+			}
+			rs.close();
+			ps.close();
+			
+			return positions;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}catch (SQLException e) {}
+		}
+		return positions;
+	}
+	
+	public Position getPosition(int positionId) {
 		Connection conn = null;
 		Position position = null;
 		try {
