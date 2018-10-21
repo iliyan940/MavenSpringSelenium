@@ -11,7 +11,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
+import application.DAO.Positions;
+import application.models.Position;
 
 public class HomeController {
 	
@@ -22,6 +23,7 @@ public class HomeController {
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\test7\\src\\application\\resources\\chromedriver.exe");
+		getPositions();
 	}
 	
 	public void loadBrowser() {
@@ -30,12 +32,11 @@ public class HomeController {
 		action = new Actions(driver);
 		this.util = (Util) cnx.getBean("util");
 		
-		openSite(driver);
-		
+		openSite();
 		((ClassPathXmlApplicationContext) cnx).close();
 	}
 	
-	public void openSite(WebDriver driver) {
+	public void openSite() {
 		int min = 158;
 		int max = 5535;
 		
@@ -45,12 +46,15 @@ public class HomeController {
 		util.sleepTime(util.rngNumberWaitTime(min, max));
 		
 		WebElement regLastNameElement = driver.findElement(By.id("reg-lastname"));
-//		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", regLastNameElement);
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", regLastNameElement);
 		action.moveToElement(regLastNameElement);
 		action.build();
 		action.perform();
 		util.sleepTime(util.rngNumberWaitTime(min, max));
 		logIn();
+		
+		
+		WebElement searchButton = driver.findElement(By.xpath("//input[@placeholder='Search']"));
 	}
 	
 	public void logIn() {
@@ -62,6 +66,13 @@ public class HomeController {
 		util.fillField(userName, userNameField, 100);
 		util.fillField(password, passField, 100);
 		submitButton.click();
+	}
+	
+	
+	public void getPositions() {
+		Positions db = cnx.getBean("Positions",Positions.class);
+		Position position = db.getPositions(1);
+		
 	}
 	
 	
