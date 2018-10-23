@@ -2,23 +2,26 @@ package application;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import application.DAO.Positions;
 import application.models.Position;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 public class HomeController implements Initializable{
@@ -30,7 +33,14 @@ public class HomeController implements Initializable{
 	private ArrayList<Position> allPositions;
 	
 	@FXML
-    private VBox fieldContainer;
+    private TableView<Position> tableView;
+	@FXML
+	private TableColumn positions;
+	@FXML
+	private TableColumn select;
+	@FXML
+	private TableColumn editButton;
+	
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\SpringMavenSelenium\\src\\application\\resources\\chromedriver.exe");
@@ -39,16 +49,16 @@ public class HomeController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ArrayList<Position> positions = getPositions();
-		String data = positions.get(0).getName();
 		
-		for(int i = 0; i < positions.size(); i++) {
-			String position = positions.get(i).getName();
-			fieldContainer.getChildren().add(new TextField(position));
-		}
+		positions.setCellValueFactory(new PropertyValueFactory<Position, String>("name"));
+		select.setCellValueFactory(new PropertyValueFactory<Position, String>("select"));
+		editButton.setCellValueFactory(new PropertyValueFactory<Position, String>("editButton"));
+			
+		Positions db = cnx.getBean("Positions",Positions.class);
 		
-		
+		tableView.setItems(db.getPositions());
 	}
+	
 	
 	public void loadBrowser() {
 		driver = (WebDriver) cnx.getBean("driver");
@@ -90,12 +100,5 @@ public class HomeController implements Initializable{
 		util.fillField(password, passField, 100);
 		submitButton.click();
 	}
-	
-	
-	public ArrayList<Position> getPositions() {
-		Positions db = cnx.getBean("Positions",Positions.class);
-		allPositions =  db.getPositions();
-		return allPositions;
-	}	
 	
 }

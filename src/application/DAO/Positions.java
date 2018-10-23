@@ -12,16 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import application.models.Position;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 @Component("Positions")
 public class Positions {
 	
 	@Autowired
 	private DataSource dataSource;
 	
-	public ArrayList<Position> getPositions() {
-		ArrayList<Position> positions = new ArrayList<Position>();
+	public ObservableList<Position> getPositions() {
+		ObservableList<Position> positions = FXCollections.observableArrayList();
 		Connection conn = null;
-		Position position = null;
 		
 		
 		try {
@@ -30,7 +31,7 @@ public class Positions {
 			
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				positions.add(new Position(rs.getInt("id"), rs.getString("name")));
+				positions.add(new Position(rs.getString("id"), rs.getString("name")));
 			}
 			rs.close();
 			ps.close();
@@ -59,7 +60,7 @@ public class Positions {
 			
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				position = new Position(positionId, rs.getString("name"));
+//				position = new Position(positionId, rs.getString("name"));
 			}
 			rs.close();
 			ps.close();
