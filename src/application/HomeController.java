@@ -2,10 +2,12 @@ package application;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -23,6 +25,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+
+
 
 public class HomeController implements Initializable{
 	
@@ -76,18 +80,88 @@ public class HomeController implements Initializable{
 		driver.manage().window().maximize();
 		
 		driver.get("https://www.linkedin.com/");
-		util.sleepTime(util.rngNumberWaitTime(min, max));
+		util.sleepTime(2000);
 		
 		WebElement regLastNameElement = driver.findElement(By.id("reg-lastname"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", regLastNameElement);
 		action.moveToElement(regLastNameElement);
 		action.build();
 		action.perform();
-		util.sleepTime(util.rngNumberWaitTime(min, max));
+		util.sleepTime(1500);
 		logIn();
 		
+		util.sleepTime(2000);
 		
-		WebElement searchButton = driver.findElement(By.xpath("//input[@placeholder='Search']"));
+		WebElement searchField = driver.findElement(By.xpath("//input[@placeholder='Search']"));
+		searchField.click();
+		util.sleepTime(2000);
+		
+		util.fillField("Full Stack", searchField, 200);
+		
+		util.sleepTime(2000);
+		
+		WebElement searchInPeople = driver.findElement(By.id("nav-search-artdeco-typeahead-results-result-0"));
+		searchInPeople.click();
+		util.sleepTime(2000);
+		
+		
+		// Look for all given pages
+		// Get number of the pages; for the test the value is 2
+		
+		int pagesToLookIn = 1;
+		
+		String currentUrl = driver.getCurrentUrl();
+		
+		for(int i = 0; i < pagesToLookIn; i++) {
+			int page = i+1;
+			openParticularPage(currentUrl, page);
+		}
+	}
+	
+	public void openParticularPage(String url, int page) {
+		String urlToOpen = url + "&page=" + page;
+		
+		if(page>1) {
+			driver.get(urlToOpen);
+			util.sleepTime(2000);
+		}
+//		searchResults();
+		
+	}
+	
+	public void searchResults()
+	{	
+		util.scrollToBottom(this.driver);
+		
+		WebElement ul = driver.findElement(By.className("search-results__list"));
+
+		List<WebElement> results =  ul.findElements(By.className("search-result__info"));
+//		for (int i = 0; i < results.size(); i++)
+		for (int i = 0; i < 1; i++)
+		{
+			WebElement link = results.get(i).findElement(By.cssSelector("a[data-control-name='search_srp_result']"));
+			
+			String profile = link.getAttribute("href");
+			util.openInNewTab(this.driver, profile);
+		    
+			util.sleepTime(6000);
+
+			WebElement messageButton = driver.findElement(By.className("pv-s-profile-actions--message"));	
+			
+			if(messageButton != null) {
+				messageButton.click();
+				
+				WebElement meesageBox = driver.findElement(By.className("msg-form__contenteditable"));
+				meesageBox.click();
+				util.sleepTime(1000);
+				util.fillField("Are you looking for a job?", meesageBox, 200);
+				WebElement submitMessage = driver.findElement(By.className("msg-form__send-button"));
+				submitMessage.click();
+				util.sleepTime(1000);
+				util.closeCurrentTab(driver);
+			}
+			
+		}
 	}
 	
 	public void logIn() {

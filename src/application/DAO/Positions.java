@@ -39,11 +39,13 @@ public class Positions {
 			return positions;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Please start sql server!");
+			//e.printStackTrace();
 		}
 		finally {
 			try {
-				conn.close();
+				if(conn != null)
+					conn.close();
 			}catch (SQLException e) {}
 		}
 		return positions;
