@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +20,23 @@ import application.models.Position;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 
 
-public class HomeController implements Initializable{
+public class HomeController extends MainController implements Initializable{
 	
 	private Actions action;
-	private ApplicationContext cnx;
+	
 	private Util util;
 	private WebDriver driver;
 	private ArrayList<Position> allPositions;
@@ -48,7 +53,6 @@ public class HomeController implements Initializable{
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\SpringMavenSelenium\\src\\application\\resources\\chromedriver.exe");
-		this.cnx = new ClassPathXmlApplicationContext("application/resources/beans.xml");
 	}
 	
 	@Override
@@ -173,6 +177,23 @@ public class HomeController implements Initializable{
 		util.fillField(userName, userNameField, 100);
 		util.fillField(password, passField, 100);
 		submitButton.click();
+	}
+	
+	public void manageProfiles() {
+		BorderPane root;
+		try {
+			root = (BorderPane)FXMLLoader.load(getClass().getResource("resources/Profiles.fxml"));
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("resources/application.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.setMinWidth(418);
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

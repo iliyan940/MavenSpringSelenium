@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane styleClass="pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ProfileController">
+   <left>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Add new profile">
+               <VBox.margin>
+                  <Insets top="7.0" />
+               </VBox.margin></Label>
+            <TextField promptText="username">
+               <VBox.margin>
+                  <Insets bottom="3.0" top="8.0" />
+               </VBox.margin></TextField>
+            <TextField promptText="password">
+               <VBox.margin>
+                  <Insets bottom="3.0" />
+               </VBox.margin></TextField>
+            <TextField promptText="salt" />
+            <Button mnemonicParsing="false" text="Add">
+               <VBox.margin>
+                  <Insets left="10.0" top="8.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </VBox>
+   </left>
+   <center>
+      <TableView fx:id="tableView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="email" maxWidth="500.0" minWidth="50.0" prefWidth="150.0" text="Mail" />
+          <TableColumn fx:id="editButton" prefWidth="75.0" text="Edit" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <Button mnemonicParsing="false" text="Choose" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="4.0" top="4.0" />
+         </BorderPane.margin>
+      </Button>
+   </bottom>
+</BorderPane>

@@ -16,9 +16,19 @@
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Add new position" />
-            <TextField />
-            <TextField />
+            <Label text="Add new&#10;position">
+               <VBox.margin>
+                  <Insets left="10.0" top="7.0" />
+               </VBox.margin></Label>
+            <TextField promptText="Position">
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin></TextField>
+            <Button mnemonicParsing="false" text="Add">
+               <VBox.margin>
+                  <Insets left="20.0" top="8.0" />
+               </VBox.margin>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -42,7 +52,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Add User" />
+                  <MenuItem mnemonicParsing="false" onAction="#manageProfiles" text="Select / Add profile" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
