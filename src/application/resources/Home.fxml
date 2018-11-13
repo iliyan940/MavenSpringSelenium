@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -39,34 +40,56 @@
       </VBox>
    </left>
    <center>
-      <TableView fx:id="tableView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="select" prefWidth="75.0" text="Search" />
           <TableColumn fx:id="positions" maxWidth="500.0" minWidth="50.0" prefWidth="150.0" text="Position" />
+            <TableColumn prefWidth="75.0" text="Pages" />
           <TableColumn fx:id="editButton" prefWidth="75.0" text="Edit" />
         </columns>
       </TableView>
    </center>
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#manageProfiles" text="Select / Add profile" />
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+               <menus>
+                  <Menu mnemonicParsing="false" text="File">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#manageProfiles" text="Select / Add profile" />
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Edit">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+            <HBox>
+               <children>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Label text="You are using: ">
+                     <HBox.margin>
+                        <Insets left="10.0" top="4.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField editable="false" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="4.0" left="8.0" top="4.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets right="3.0" top="3.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </top>
 </BorderPane>

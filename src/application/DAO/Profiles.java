@@ -5,10 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import application.models.Position;
@@ -20,74 +23,41 @@ import javafx.collections.ObservableList;
 @Component("Profiles")
 public class Profiles {
 	
-	@Autowired
 	private DataSource dataSource;
+	private JdbcTemplate jdbcTemplate;
 	
-	public ObservableList<Profile> getProfiles() {
-		ObservableList<Profile> profiles = FXCollections.observableArrayList();
-		Connection conn = null;
-		
-		
-		try {
-			conn = dataSource.getConnection();
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM profiles");
-			
-			ResultSet rs = ps.executeQuery();
-			while(rs.next()) {
-				profiles.add(new Profile(rs.getString("email")));
-			}
-			rs.close();
-			ps.close();
-			
-			return profiles;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Please start sql server!");
-		}
-		finally {
-			try {
-				if(conn != null)
-					conn.close();
-			}catch (SQLException e) {}
-		}
+	public ObservableList<Profile> getProfiles() {		
+		 String sql = "SELECT * FROM profiles";
+	
+			 List<Profile> result = jdbcTemplate.query(sql, new RowMapper<Profile>() {
+				 
+		            public Profile mapRow(ResultSet result, int rowNum) throws SQLException {
+		                Profile contact = new Profile(result.getString("email"));
+		               
+		                return contact;
+		            }
+		             
+		        });	
+			 ObservableList<Profile> profiles = FXCollections.observableArrayList(result);
 		return profiles;
-	}
-	
-	public Position getPosition(int positionId) {
-		Connection conn = null;
-		Position position = null;
-		try {
-			conn = dataSource.getConnection();
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM positions WHERE id = ?");
-			ps.setInt(1,positionId);
-			
-			
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-//				position = new Position(positionId, rs.getString("name"));
-			}
-			rs.close();
-			ps.close();
-			
-			return position;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				conn.close();
-			}catch (SQLException e) {}
-		}
-		return position;
 	}
 	
 	public DataSource getDataSource() {
 		return dataSource;
 	}
-
+	
+	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+//		this.dataSource = dataSource;
+	}
+
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 }

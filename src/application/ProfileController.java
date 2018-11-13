@@ -33,6 +33,8 @@ public class ProfileController extends MainController implements Initializable {
 		Profiles db = cnx.getBean("Profiles", Profiles.class);
 		
 		tableView.setItems(db.getProfiles());
+		
+
 	}
 	
 	

@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import application.DAO.Positions;
+import application.DAO.Profiles;
 import application.models.Position;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,6 +66,7 @@ public class HomeController extends MainController implements Initializable{
 		Positions db = cnx.getBean("Positions",Positions.class);
 		
 		tableView.setItems(db.getPositions());
+		
 	}
 	
 	
