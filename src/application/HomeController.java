@@ -8,28 +8,22 @@ import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import application.DAO.Positions;
-import application.DAO.Profiles;
 import application.models.Position;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
@@ -40,7 +34,6 @@ public class HomeController extends MainController implements Initializable{
 	
 	private Util util;
 	private WebDriver driver;
-	private ArrayList<Position> allPositions;
 	
 	@FXML
     private TableView<Position> tableView;
@@ -50,7 +43,8 @@ public class HomeController extends MainController implements Initializable{
 	private TableColumn select;
 	@FXML
 	private TableColumn editButton;
-	
+	@FXML
+	private TableColumn pages;
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\SpringMavenSelenium\\src\\application\\resources\\chromedriver.exe");
@@ -62,6 +56,7 @@ public class HomeController extends MainController implements Initializable{
 		positions.setCellValueFactory(new PropertyValueFactory<Position, String>("name"));
 		select.setCellValueFactory(new PropertyValueFactory<Position, String>("select"));
 		editButton.setCellValueFactory(new PropertyValueFactory<Position, String>("editButton"));
+		pages.setCellValueFactory(new PropertyValueFactory<Position, String>("pages"));
 			
 		Positions db = cnx.getBean("Positions",Positions.class);
 		
