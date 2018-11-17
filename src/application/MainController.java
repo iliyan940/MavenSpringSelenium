@@ -9,9 +9,6 @@ import application.DAO.Profiles;
 public abstract class MainController {
 	
 	protected ApplicationContext cnx;
-	
-	@Autowired
-	public Profiles prof;
 
 	public MainController() {
 		this.cnx = new ClassPathXmlApplicationContext("application/resources/beans.xml");

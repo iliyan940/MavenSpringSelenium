@@ -1,26 +1,33 @@
 package application.models;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 
 public class Profile {
 	
+	private int id;
 	private SimpleStringProperty email;
-	private ImageView editButton;
+	private String password;
 	
-	public Profile(String email) {
+	public Profile(Integer id ,String email, String password) {
+		this.id = id;
 		this.email = new SimpleStringProperty(email);
-		this.editButton = new ImageView(new Image("/application/resources/img/edit-icon.png"));
-	}
-	
-	public ImageView getEditButton() {
-		return editButton;
+		this.password = password;
 	}
 
-	public void setEditButton(ImageView editButton) {
-		this.editButton = editButton;
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -30,4 +37,6 @@ public class Profile {
 	public void setEmail(SimpleStringProperty email) {
 		this.email = email;
 	}
+	
+	
 }
