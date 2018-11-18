@@ -17,6 +17,7 @@ import application.models.Position;
 import application.models.Profile;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -39,6 +40,8 @@ public class HomeController extends MainController implements Initializable{
 	private TableColumn<Position, String> pages;
 	@FXML
 	public TextField selectedProfile;
+	@FXML
+	private PasswordField salt;
 	
 	private Profile activeProfile;
 	
@@ -52,8 +55,7 @@ public class HomeController extends MainController implements Initializable{
 		select.setCellValueFactory(new PropertyValueFactory<Position, String>("select"));
 		pages.setCellValueFactory(new PropertyValueFactory<Position, String>("pages"));
 		Positions positions = cnx.getBean("Positions", Positions.class);
-		tableView.setItems(positions.get());
-		
+		this.tableView.setItems(positions.get());
 		updatedChoosedProfile();
 	}
 	
@@ -65,7 +67,7 @@ public class HomeController extends MainController implements Initializable{
 	
 	}
 	
-	public void loadBrowser() {
+	public void loadBrowser() throws Exception {
 		driver = (WebDriver) cnx.getBean("driver");
 		action = new Actions(driver);
 		this.util = (Util) cnx.getBean("util");
@@ -74,7 +76,7 @@ public class HomeController extends MainController implements Initializable{
 		((ClassPathXmlApplicationContext) cnx).close();
 	}
 	
-	public void openSite() {
+	public void openSite() throws Exception {
 		int min = 158;
 		int max = 5535;
 		
@@ -93,23 +95,41 @@ public class HomeController extends MainController implements Initializable{
 		
 		util.sleepTime(2000);
 		
+		for(int i = 0; i<this.tableView.getItems().size(); i++) {
+			if(this.tableView.getItems().get(i).isSelected()) {
+				String position = this.tableView.getItems().get(i).getName();
+				System.out.println(position);
+				
+				
+				searchForParticularPosition(position);
+				
+			
+			} else {
+				continue;
+			}
+		}	
+	}
+	
+	public void searchForParticularPosition(String position) {
+		
 		WebElement searchField = driver.findElement(By.xpath("//input[@placeholder='Search']"));
 		searchField.click();
 		util.sleepTime(2000);
 		
-		util.fillField("Full Stack", searchField, 200);
+		
+		util.fillField(position, searchField, 200);
 		
 		util.sleepTime(2000);
 		
-		WebElement searchInPeople = driver.findElement(By.id("nav-search-artdeco-typeahead-results-result-0"));
-		searchInPeople.click();
+		WebElement searchinPeople2 = driver.findElement(By.xpath("//*[text() = 'People']"));
+		searchinPeople2.click();
 		util.sleepTime(2000);
 		
 		
 		// Look for all given pages
 		// Get number of the pages; for the test the value is 2
 		
-		int pagesToLookIn = 1;
+		int pagesToLookIn = 3;
 		
 		String currentUrl = driver.getCurrentUrl();
 		
@@ -117,6 +137,7 @@ public class HomeController extends MainController implements Initializable{
 			int page = i+1;
 			openParticularPage(currentUrl, page);
 		}
+		util.sleepTime(2000);
 	}
 	
 	public void openParticularPage(String url, int page) {
@@ -165,14 +186,16 @@ public class HomeController extends MainController implements Initializable{
 		}
 	}
 	
-	public void logIn() {
+	public void logIn() throws Exception {
+		String decryptedPassword = new Crypt(this.salt.getText()).decrypt(this.activeProfile.getPassword());		
+		
 		WebElement userNameField = driver.findElement(By.name("session_key"));
 		WebElement passField = driver.findElement(By.name("session_password"));
 		WebElement submitButton = driver.findElement(By.id("login-submit"));
 		String email = this.activeProfile.getEmail();
-		String password = this.activeProfile.getPassword();
+		
 		util.fillField(email, userNameField, 100);
-		util.fillField(password, passField, 100);
+		util.fillField(decryptedPassword, passField, 100);
 		submitButton.click();
 	}
 	

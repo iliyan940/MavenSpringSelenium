@@ -87,7 +87,6 @@ public class ProfileController extends MainController implements Initializable {
 	public void edit() {
 		Profile profile = this.tableView.getSelectionModel().getSelectedItem();
 		this.email.setText(profile.getEmail());
-		this.password.setText(profile.getPassword());
 		
 		this.editInfo.put("id", profile.getId());
 		this.editInfo.put("index", this.tableView.getSelectionModel().getFocusedIndex());
@@ -95,12 +94,17 @@ public class ProfileController extends MainController implements Initializable {
 		toggleEditButtons();
 	}
 	
-	public void update() {
-		Profile updatedProfile = new Profile(editInfo.get("id"), this.email.getText(), this.password.getText());
+	public void update() throws Exception {
+		String salt = this.salt.getText();
+		Crypt crypt = new Crypt(salt);
+		
+		String enctyptedPassword = crypt.encrypt(this.password.getText());
+		
+		Profile updatedProfile = new Profile(editInfo.get("id"), this.email.getText(), enctyptedPassword);
 		profiles.update(updatedProfile);
 		
-		SimpleStringProperty tes = new SimpleStringProperty(this.email.getText());
-		this.tableView.getItems().get(editInfo.get("index")).setEmail(tes);
+		SimpleStringProperty EmailProperty = new SimpleStringProperty(this.email.getText());
+		this.tableView.getItems().get(editInfo.get("index")).setEmail(EmailProperty);
 		this.tableView.refresh();
 		
 		 toggleEditButtons();
@@ -120,7 +124,7 @@ public class ProfileController extends MainController implements Initializable {
 	public void choose() {
 		Profile selectedProfile = this.tableView.getSelectionModel().getSelectedItem();
 		this.profiles.setActive(selectedProfile.getId());
-		this.homeController.selectedProfile.setText(selectedProfile.getEmail());
+		this.homeController.updatedChoosedProfile();
 		this.stage.close();
 	}
 	

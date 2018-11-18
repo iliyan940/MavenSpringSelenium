@@ -80,6 +80,7 @@
                      </HBox.margin>
                   </Label>
                   <TextField fx:id="selectedProfile" editable="false" />
+                  <PasswordField fx:id="salt" promptText="salt" />
                </children>
                <VBox.margin>
                   <Insets bottom="4.0" left="8.0" top="4.0" />

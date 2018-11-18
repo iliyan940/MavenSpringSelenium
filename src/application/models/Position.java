@@ -35,6 +35,8 @@ public class Position {
 		        }
 		    }
 		});
+		
+		this.pages.setText("5");
 	}
 	
 	public TextField getPages() {
@@ -71,6 +73,10 @@ public class Position {
 	
 	public void setEditButton(ImageView editButton) {
 		this.editButton = editButton;
+	}
+	
+	public boolean isSelected() {
+		return this.select.isSelected();
 	}
 	
 }
