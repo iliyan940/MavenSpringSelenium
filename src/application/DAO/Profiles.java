@@ -81,4 +81,22 @@ public class Profiles extends MainModel{
 		jdbcTemplate.update(sql2, params2);
 	}
 	
+	public Profile getActive() {
+		String sql = "SELECT * FROM profiles WHERE active=1";
+		Profile active = jdbcTemplate.queryForObject(sql,  new RowMapper<Profile>() {
+            public Profile mapRow(ResultSet result, int rowNum) throws SQLException {
+                
+            	Profile contact = new Profile(
+                		result.getInt("id"), 
+                		result.getString("email"), 
+                		result.getString("password")
+                		);
+            	
+                return contact;
+            }
+        });
+		
+		return active;
+	}
+	
 }

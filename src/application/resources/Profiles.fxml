@@ -46,7 +46,7 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#choose" text="Choose" />
+            <Button fx:id="chooseButton" mnemonicParsing="false" onAction="#choose" text="Choose" />
             <Button fx:id="editButton" mnemonicParsing="false" onAction="#edit" text="Edit" />
          </children>
       </HBox>

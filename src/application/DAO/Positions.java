@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 @Component("Positions")
 public class Positions extends MainModel {
 	
-	public ObservableList<Position> getPositions() {		
+	public ObservableList<Position> get() {		
 		 String sql = "SELECT * FROM positions";
 	
 			 List<Position> result = jdbcTemplate.query(sql, new RowMapper<Position>() {
@@ -26,5 +26,4 @@ public class Positions extends MainModel {
 			 ObservableList<Position> profiles = FXCollections.observableArrayList(result);
 		return profiles;
 	}
-
 }

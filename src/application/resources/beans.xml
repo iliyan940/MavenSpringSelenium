@@ -8,7 +8,7 @@
 
 <context:annotation-config />
 
-<context:component-scan base-package="application.DAO" /> 
+<context:component-scan base-package="application.DAO, application.Services" /> 
 
 <bean id="driver" class="org.openqa.selenium.chrome.ChromeDriver" lazy-init="true" />
 <bean id="util" class="application.Util"/>

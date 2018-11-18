@@ -45,7 +45,6 @@
           <TableColumn fx:id="select" prefWidth="75.0" text="Search" />
           <TableColumn fx:id="positions" maxWidth="500.0" minWidth="50.0" prefWidth="150.0" text="Position" />
             <TableColumn fx:id="pages" prefWidth="75.0" text="Pages" />
-          <TableColumn fx:id="editButton" prefWidth="75.0" text="Edit" />
         </columns>
       </TableView>
    </center>
@@ -80,7 +79,7 @@
                         <Insets left="10.0" top="4.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField editable="false" />
+                  <TextField fx:id="selectedProfile" editable="false" />
                </children>
                <VBox.margin>
                   <Insets bottom="4.0" left="8.0" top="4.0" />

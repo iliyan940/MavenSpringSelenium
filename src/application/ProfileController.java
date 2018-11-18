@@ -1,21 +1,29 @@
 package application;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 
 import application.DAO.Profiles;
 import application.models.Profile;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class ProfileController extends MainController implements Initializable {
 	
@@ -38,9 +46,15 @@ public class ProfileController extends MainController implements Initializable {
 	private Button updateButton;
 	@FXML
 	private Button addButton;
+	@FXML
+	private Button chooseButton;
+	
+	private Stage stage ;
+	private HomeController homeController;
 	
 	private Map<String, Integer> editInfo = new HashMap<String, Integer>();
 	private Profiles profiles = cnx.getBean("Profiles", Profiles.class);
+
 	
 	public void initialize(URL location, ResourceBundle resources) {
 		emailColumn.setCellValueFactory(new PropertyValueFactory<Profile, String>("email"));
@@ -106,27 +120,25 @@ public class ProfileController extends MainController implements Initializable {
 	public void choose() {
 		Profile selectedProfile = this.tableView.getSelectionModel().getSelectedItem();
 		this.profiles.setActive(selectedProfile.getId());
+		this.homeController.selectedProfile.setText(selectedProfile.getEmail());
+		this.stage.close();
 	}
 	
-	//TODO UTIL LOOP
 	public void toggleEditButtons() {
-		if(this.updateButton.isVisible()) {
-			this.updateButton.setVisible(false);
-		} else {
-			this.updateButton.setVisible(true);
+		
+		List<Button> buttons = new ArrayList<Button>();
+		buttons.add(this.updateButton);
+		buttons.add(this.deleteButton);
+		buttons.add(addButton);
+		
+		for(int i = 0; i < buttons.size(); i++) {
+			if(!buttons.get(i).isVisible()) {
+				buttons.get(i).setVisible(true);
+			} else {
+				buttons.get(i).setVisible(false);
+			}
 		}
 		
-		if(this.deleteButton.isVisible()) {
-			this.deleteButton.setVisible(false);
-		} else {
-			this.deleteButton.setVisible(true);
-		}
-		
-		if(this.addButton.isVisible()) {
-			this.addButton.setVisible(false);
-		} else {
-			this.addButton.setVisible(true);
-		}
 	}
 	
 	public void clearTextFields() {
@@ -134,4 +146,37 @@ public class ProfileController extends MainController implements Initializable {
 		 this.password.clear();
 		 this.salt.clear();
 	}
+	
+	public void openWindow(HomeController homeController) {
+		FXMLLoader root;
+		try {
+			root = new FXMLLoader(getClass().getResource("resources/Profiles.fxml"));
+			
+			BorderPane borderPane = root.load();
+			Scene scene = new Scene(borderPane	);
+			scene.getStylesheets().add(getClass().getResource("resources/application.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.setMinWidth(418);
+			
+			stage.show();
+			
+			ProfileController controller = root.getController();
+			controller.setStage(stage);
+			controller.setHomeController(homeController);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public void setHomeController(HomeController homeController) {
+		this.homeController = homeController;
+	}
+	
 }

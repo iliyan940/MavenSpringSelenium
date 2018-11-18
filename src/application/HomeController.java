@@ -1,8 +1,6 @@
 package application;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -14,20 +12,16 @@ import org.openqa.selenium.interactions.Actions;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import application.DAO.Positions;
+import application.DAO.Profiles;
 import application.models.Position;
+import application.models.Profile;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-
-
-
+	
 public class HomeController extends MainController implements Initializable{
 	
 	private Actions action;
@@ -38,13 +32,15 @@ public class HomeController extends MainController implements Initializable{
 	@FXML
     private TableView<Position> tableView;
 	@FXML
-	private TableColumn positions;
+	private TableColumn<Position, String> positions;
 	@FXML
-	private TableColumn select;
+	private TableColumn<Position, String> select;
 	@FXML
-	private TableColumn editButton;
+	private TableColumn<Position, String> pages;
 	@FXML
-	private TableColumn pages;
+	public TextField selectedProfile;
+	
+	private Profile activeProfile;
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\SpringMavenSelenium\\src\\application\\resources\\chromedriver.exe");
@@ -52,18 +48,22 @@ public class HomeController extends MainController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 		positions.setCellValueFactory(new PropertyValueFactory<Position, String>("name"));
 		select.setCellValueFactory(new PropertyValueFactory<Position, String>("select"));
-		editButton.setCellValueFactory(new PropertyValueFactory<Position, String>("editButton"));
 		pages.setCellValueFactory(new PropertyValueFactory<Position, String>("pages"));
-			
-		Positions db = cnx.getBean("Positions",Positions.class);
+		Positions positions = cnx.getBean("Positions", Positions.class);
+		tableView.setItems(positions.get());
 		
-		tableView.setItems(db.getPositions());
-		
+		updatedChoosedProfile();
 	}
 	
+	public void updatedChoosedProfile(){
+		Profiles active = cnx.getBean("Profiles", Profiles.class);
+		this.activeProfile = active.getActive();
+		
+		selectedProfile.setText(this.activeProfile.getEmail());
+	
+	}
 	
 	public void loadBrowser() {
 		driver = (WebDriver) cnx.getBean("driver");
@@ -169,28 +169,15 @@ public class HomeController extends MainController implements Initializable{
 		WebElement userNameField = driver.findElement(By.name("session_key"));
 		WebElement passField = driver.findElement(By.name("session_password"));
 		WebElement submitButton = driver.findElement(By.id("login-submit"));
-		String userName = "test";
-		String password = "test";
-		util.fillField(userName, userNameField, 100);
+		String email = this.activeProfile.getEmail();
+		String password = this.activeProfile.getPassword();
+		util.fillField(email, userNameField, 100);
 		util.fillField(password, passField, 100);
 		submitButton.click();
 	}
 	
 	public void manageProfiles() {
-		BorderPane root;
-		try {
-			root = (BorderPane)FXMLLoader.load(getClass().getResource("resources/Profiles.fxml"));
-			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("resources/application.css").toExternalForm());
-			Stage stage = new Stage();
-			stage.setScene(scene);
-			stage.setMinWidth(418);
-			stage.show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		new ProfileController().openWindow(this);
 	}
 	
 }
