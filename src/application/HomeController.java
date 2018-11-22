@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -129,7 +130,7 @@ public class HomeController extends MainController implements Initializable{
 		// Look for all given pages
 		// Get number of the pages; for the test the value is 2
 		
-		int pagesToLookIn = 3;
+		int pagesToLookIn = 2;
 		
 		String currentUrl = driver.getCurrentUrl();
 		
@@ -138,15 +139,17 @@ public class HomeController extends MainController implements Initializable{
 			openParticularPage(currentUrl, page);
 		}
 		util.sleepTime(2000);
+		
+		
+		WebElement searchField_again = driver.findElement(By.xpath("//input[@placeholder='Search']"));
+		searchField_again.clear();
 	}
 	
 	public void openParticularPage(String url, int page) {
 		String urlToOpen = url + "&page=" + page;
-		
-		if(page>1) {
 			driver.get(urlToOpen);
 			util.sleepTime(2000);
-		}
+
 //		searchResults();
 		
 	}
