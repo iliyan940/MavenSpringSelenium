@@ -8,12 +8,6 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane styleClass="pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HomeController">
-   <bottom>
-      <Button mnemonicParsing="false" onAction="#loadBrowser" text="Start" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin></Button>
-   </bottom>
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -21,15 +15,16 @@
                <VBox.margin>
                   <Insets left="10.0" top="7.0" />
                </VBox.margin></Label>
-            <TextField promptText="Position">
+            <TextField fx:id="position" promptText="Position">
                <VBox.margin>
                   <Insets top="8.0" />
                </VBox.margin></TextField>
-            <Button mnemonicParsing="false" text="Add">
+            <Button mnemonicParsing="false" onAction="#add" text="Add">
                <VBox.margin>
                   <Insets left="20.0" top="8.0" />
                </VBox.margin>
             </Button>
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" visible="false" />
          </children>
          <BorderPane.margin>
             <Insets />
@@ -92,4 +87,12 @@
          </children>
       </VBox>
    </top>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#loadBrowser" text="Start" />
+            <Button mnemonicParsing="false" onAction="#edit" text="Edit" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

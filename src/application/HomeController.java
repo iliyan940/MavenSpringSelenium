@@ -1,7 +1,9 @@
 package application;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.openqa.selenium.By;
@@ -18,6 +20,7 @@ import application.models.Position;
 import application.models.Profile;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,8 +46,16 @@ public class HomeController extends MainController implements Initializable{
 	public TextField selectedProfile;
 	@FXML
 	private PasswordField salt;
+	@FXML
+	private TextField position;
+	@FXML
+	private Button deleteButton;
+	
+	private Map<String, Integer> editInfo = new HashMap<String, Integer>();
 	
 	private Profile activeProfile;
+	
+	private Positions positionsDAO = cnx.getBean("Positions", Positions.class);
 	
 	public HomeController() {
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Neo\\eclipse-workspace\\SpringMavenSelenium\\src\\application\\resources\\chromedriver.exe");
@@ -65,7 +76,6 @@ public class HomeController extends MainController implements Initializable{
 		this.activeProfile = active.getActive();
 		
 		selectedProfile.setText(this.activeProfile.getEmail());
-	
 	}
 	
 	public void loadBrowser() throws Exception {
@@ -99,24 +109,19 @@ public class HomeController extends MainController implements Initializable{
 		for(int i = 0; i<this.tableView.getItems().size(); i++) {
 			if(this.tableView.getItems().get(i).isSelected()) {
 				String position = this.tableView.getItems().get(i).getName();
-				System.out.println(position);
+				int pages = Integer.parseInt(this.tableView.getItems().get(i).getPages().getText());
 				
-				
-				searchForParticularPosition(position);
-				
-			
+				searchForParticularPosition(position, pages);
 			} else {
 				continue;
 			}
 		}	
 	}
 	
-	public void searchForParticularPosition(String position) {
-		
+	public void searchForParticularPosition(String position, int pagesToLookIn) {
 		WebElement searchField = driver.findElement(By.xpath("//input[@placeholder='Search']"));
 		searchField.click();
 		util.sleepTime(2000);
-		
 		
 		util.fillField(position, searchField, 200);
 		
@@ -126,12 +131,6 @@ public class HomeController extends MainController implements Initializable{
 		searchinPeople2.click();
 		util.sleepTime(2000);
 		
-		
-		// Look for all given pages
-		// Get number of the pages; for the test the value is 2
-		
-		int pagesToLookIn = 2;
-		
 		String currentUrl = driver.getCurrentUrl();
 		
 		for(int i = 0; i < pagesToLookIn; i++) {
@@ -139,7 +138,6 @@ public class HomeController extends MainController implements Initializable{
 			openParticularPage(currentUrl, page);
 		}
 		util.sleepTime(2000);
-		
 		
 		WebElement searchField_again = driver.findElement(By.xpath("//input[@placeholder='Search']"));
 		searchField_again.clear();
@@ -149,9 +147,7 @@ public class HomeController extends MainController implements Initializable{
 		String urlToOpen = url + "&page=" + page;
 			driver.get(urlToOpen);
 			util.sleepTime(2000);
-
-//		searchResults();
-		
+//		searchResults();	
 	}
 	
 	public void searchResults()
@@ -206,4 +202,30 @@ public class HomeController extends MainController implements Initializable{
 		new ProfileController().openWindow(this);
 	}
 	
+	public void add() {
+		String position = this.position.getText();
+		
+		int id = this.positionsDAO.Insert(position);
+		
+		Position newPosition = new Position(id, position);
+		tableView.getItems().add(newPosition);
+		
+		this.position.clear();
+	}
+	
+	public void edit() {
+		Position position = this.tableView.getSelectionModel().getSelectedItem();
+		this.deleteButton.setVisible(true);
+		this.position.setText(position.getName());
+		
+		this.editInfo.put("id", Integer.parseInt(position.getId()));
+		this.editInfo.put("index", this.tableView.getSelectionModel().getFocusedIndex());
+	}
+	
+	public void delete() {
+			this.positionsDAO.delete(this.editInfo.get("id"));
+			this.tableView.getItems().remove((int) this.tableView.getSelectionModel().getFocusedIndex());
+			this.deleteButton.setVisible(false);
+			this.position.clear();
+	}
 }

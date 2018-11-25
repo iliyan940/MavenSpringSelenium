@@ -19,8 +19,9 @@ public class Position {
 	private ImageView editButton;
 	private TextField pages;
 
-	public Position(String id, String name) {
-		this.id = new SimpleStringProperty(id);
+	public Position(Integer id, String name) {
+		
+		this.id = new SimpleStringProperty(Integer.toString(id));
 		this.name = new SimpleStringProperty(name);	
 		this.select = new CheckBox();	
 		this.editButton = new ImageView(new Image("/application/resources/img/edit-icon.png"));
